@@ -65,97 +65,111 @@
             100% { opacity: 0.2; transform: scale(0.8); }
         }
 
-        /* --- NEW: SNAKE BORDER LOADING ANIMATION --- */
+        /* --- UPDATED: BOUNCING BOTTOM LOADER --- */
         #success-overlay {
             position: fixed;
-            top: 0;
+            bottom: 0;
             left: 0;
             width: 100vw;
-            height: 100vh;
+            height: 6px; /* Height of the bar */
             pointer-events: none;
-            z-index: 99999;
-            /* Hidden by default */
+            z-index: 99998;
             display: none; 
+            overflow: hidden;
         }
 
-        /* Active state makes it visible */
         #success-overlay.active-overlay {
             display: block;
         }
 
-        /* The 4 Lines */
-        #success-overlay span {
+        /* The Bouncing Bar */
+        #success-overlay .bouncer {
             position: absolute;
-            display: block;
-        }
-
-        /* Using filter: drop-shadow allows the glow to follow the transparency 
-           of the gradient, creating a "fading light" effect instead of a solid box.
-        */
-
-        /* TOP LINE */
-        #success-overlay span:nth-child(1) {
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 6px; /* Slightly thicker for better glow */
-            background: linear-gradient(90deg, transparent, transparent 40%, #7c3aed);
-            filter: drop-shadow(0 0 10px #7c3aed) drop-shadow(0 0 20px #7c3aed);
-            animation: animateTop 2s linear infinite;
-        }
-
-        /* RIGHT LINE */
-        #success-overlay span:nth-child(2) {
-            top: -100%;
-            right: 0;
-            width: 6px;
-            height: 100%;
-            background: linear-gradient(180deg, transparent, transparent 40%, #7c3aed);
-            filter: drop-shadow(0 0 10px #7c3aed) drop-shadow(0 0 20px #7c3aed);
-            animation: animateRight 2s linear infinite;
-            animation-delay: 0.5s;
-        }
-
-        /* BOTTOM LINE */
-        #success-overlay span:nth-child(3) {
             bottom: 0;
-            right: -100%;
-            width: 100%;
-            height: 6px;
-            background: linear-gradient(270deg, transparent, transparent 40%, #7c3aed);
-            filter: drop-shadow(0 0 10px #7c3aed) drop-shadow(0 0 20px #7c3aed);
-            animation: animateBottom 2s linear infinite;
-            animation-delay: 1s;
-        }
-
-        /* LEFT LINE */
-        #success-overlay span:nth-child(4) {
-            bottom: -100%;
             left: 0;
-            width: 6px;
+            width: 30%; /* Length of the bouncing light */
             height: 100%;
-            background: linear-gradient(360deg, transparent, transparent 40%, #7c3aed);
+            background: linear-gradient(90deg, transparent, #7c3aed, transparent);
             filter: drop-shadow(0 0 10px #7c3aed) drop-shadow(0 0 20px #7c3aed);
-            animation: animateLeft 2s linear infinite;
-            animation-delay: 1.5s;
+            border-radius: 4px;
+            /* 2s duration means it goes there and back quickly, looping */
+            animation: bounceHorizontal 1.5s ease-in-out infinite alternate;
         }
 
-        /* Keyframes for smooth movement around edges */
-        @keyframes animateTop {
-            0% { left: -100%; }
-            50%, 100% { left: 100%; }
+        @keyframes bounceHorizontal {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw - 100%)); } 
+            /* 100vw (screen width) - 100% (element width) ensures it stops at right edge */
         }
-        @keyframes animateRight {
-            0% { top: -100%; }
-            50%, 100% { top: 100%; }
+
+        /* --- LIQUID GLASS POPUP --- */
+        #glass-popup {
+            position: fixed;
+            top: -150px; /* Hidden initially above screen */
+            left: 50%;
+            transform: translateX(-50%);
+            width: auto;
+            min-width: 340px;
+            
+            /* The Apple "Liquid Glass" Effect */
+            background: rgba(255, 255, 255, 0.1); /* Very subtle transparency */
+            backdrop-filter: blur(20px) saturate(180%); /* Strong blur + vibrance */
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle rim light */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); /* Deep shadow */
+            
+            border-radius: 50px; /* "Rounded from corners" / Pill shape */
+            padding: 12px 25px;
+            
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 100000; /* On top of everything */
+            
+            /* Smooth Bouncy Animation */
+            transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
         }
-        @keyframes animateBottom {
-            0% { right: -100%; }
-            50%, 100% { right: 100%; }
+
+        #glass-popup.show-popup {
+            top: 30px; /* Slide down into view */
         }
-        @keyframes animateLeft {
-            0% { bottom: -100%; }
-            50%, 100% { bottom: 100%; }
+
+        .popup-icon {
+            width: 36px;
+            height: 36px;
+            /* UPDATED: Alert Orange color */
+            background: #ff9500; 
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-weight: 900;
+            font-size: 20px;
+            /* Updated shadow color */
+            box-shadow: 0 0 15px rgba(255, 149, 0, 0.4);
+            flex-shrink: 0;
+            font-family: monospace; /* Makes the '!' look cleaner */
+        }
+
+        .popup-content {
+            flex-grow: 1;
+        }
+
+        .popup-content h4 {
+            margin: 0;
+            font-size: 15px;
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .popup-content p {
+            margin: 0;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 400;
         }
 
 
@@ -686,12 +700,18 @@
     <!-- === NEW: STARS CONTAINER === -->
     <div id="stars-container"></div>
 
-    <!-- === NEW: SNAKE BORDER ANIMATION === -->
+    <!-- === UPDATED: BOUNCING BOTTOM ANIMATION === -->
     <div id="success-overlay">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+        <div class="bouncer"></div>
+    </div>
+    
+    <!-- === UPDATED: APPLE LIQUID GLASS POPUP (ALERT ICON) === -->
+    <div id="glass-popup">
+        <div class="popup-icon">!</div>
+        <div class="popup-content">
+            <h4 id="popup-title">Success</h4>
+            <p id="popup-message">Registration Complete</p>
+        </div>
     </div>
 
     <!-- === NEW: CURSOR GLOW ELEMENT === -->
@@ -874,25 +894,27 @@
                     <p style="color: #94a3b8; font-size: 14px;">Roll No: 2405170084</p>
                     <p style="color: #a78bfa; font-weight: bold; font-size:12px;">DESIGN</p>
                 </div>
-                <!-- Member 3 -->
+                
+                <!-- Member 3: Arjun (Updated Role) -->
                 <div class="team-member">
                     <div class="team-avatar">
-                        <!-- File Text Icon for Content -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                        <!-- Code Brackets Icon (Swapped for Logic) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                     </div>
                     <h3>Arjun Metha</h3>
                     <p style="color: #94a3b8; font-size: 14px;">Roll No: 992505170002</p>
-                    <p style="color: #a78bfa; font-weight: bold; font-size:12px;">CONTENT</p>
+                    <p style="color: #a78bfa; font-weight: bold; font-size:12px;">LOGIC & ANIMATION</p>
                 </div>
-                <!-- Member 4 -->
+
+                <!-- Member 4: Himanshi (Added) -->
                 <div class="team-member">
                     <div class="team-avatar">
-                        <!-- Code Brackets/Brain Icon for Logic -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        <!-- File Text Icon (Swapped for Content) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
                     </div>
-                    <h3>Member 4</h3>
+                    <h3>Himanshi</h3>
                     <p style="color: #94a3b8; font-size: 14px;">Roll No: TBD</p>
-                    <p style="color: #a78bfa; font-weight: bold; font-size:12px;">LOGIC</p>
+                    <p style="color: #a78bfa; font-weight: bold; font-size:12px;">CONTENT WRITING</p>
                 </div>
             </div>
         </section>
@@ -940,36 +962,48 @@
             setTimeout(reveal, 500);
         }
 
-        // Function 1: Registration Validation
+        // Function 1: Registration Validation & Popup Logic
         function registerStudent() {
             var name = document.getElementById('name').value;
             var event = document.getElementById('eventSelect').value;
 
+            // 1. Basic Validation
             if(event === "") {
                 alert("Please select an event to participate in!");
                 return false; 
             }
 
-            // TRIGGER THE SNAKE BORDER ANIMATION
+            // 2. Trigger the "Bouncing Bottom Bar" Animation
             const overlay = document.getElementById('success-overlay');
             overlay.classList.add('active-overlay');
 
-            // Wait a moment for the animation to start before showing the alert
+            // 3. Trigger the "Liquid Glass" Popup
+            const popup = document.getElementById('glass-popup');
+            const popupTitle = document.getElementById('popup-title');
+            const popupMessage = document.getElementById('popup-message');
+
+            // Update Popup Content
+            popupTitle.innerText = "Registration Successful!";
+            popupMessage.innerText = `${name} is registered for ${event}.`;
+
+            // Show Popup (CSS transition handles the slide down)
+            popup.classList.add('show-popup');
+
+            // 4. Reset & Cleanup after 4 seconds
             setTimeout(function() {
-                alert("Success! " + name + " has been registered for " + event + ".");
+                // Hide popup
+                popup.classList.remove('show-popup');
+                // Hide animation
+                overlay.classList.remove('active-overlay');
                 
-                // Clear fields
+                // Clear Form Fields
                 document.getElementById('name').value = "";
                 document.getElementById('roll').value = "";
                 document.getElementById('eventSelect').value = "";
                 
-                // Remove the animation after a few seconds (e.g., 4s for two cycles)
-                setTimeout(function() {
-                    overlay.classList.remove('active-overlay');
-                }, 4000);
-                
-            }, 500);
+            }, 4000);
 
+            // Prevent form submission refresh
             return false;
         }
 
@@ -1039,4 +1073,3 @@
 
 </body>
 </html>
-
