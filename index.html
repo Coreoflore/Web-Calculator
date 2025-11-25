@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechNova 2024 - JIIT</title>
+    <title>TechNova 2026 - JIIT</title>
     <style>
         /* --- CSS Section --- */
         
@@ -38,60 +38,124 @@
             pointer-events: none;
         }
 
-        /* --- APPLE STYLE NOTIFICATION TOAST --- */
-        #notification-toast {
-            position: fixed;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px); 
-            background: rgba(15, 23, 42, 0.6); 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50px; 
-            padding: 12px 25px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            z-index: 100000;
-            opacity: 0;
-            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            min-width: 320px;
+        /* --- NEW: GLOWING STARS BACKGROUND --- */
+        #stars-container {
+            position: absolute; /* Changed to absolute so it scrolls with the page */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3; /* Behind everything */
+            pointer-events: none;
+            overflow: hidden;
         }
 
-        #notification-toast.show-toast {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
-        .toast-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+        .star {
+            position: absolute;
+            background: radial-gradient(circle, #ffffff 20%, #7c3aed 100%);
             border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 16px;
-            box-shadow: 0 0 15px rgba(124, 58, 237, 0.5);
+            box-shadow: 0 0 6px rgba(124, 58, 237, 0.8), 0 0 12px rgba(124, 58, 237, 0.4);
+            animation: twinkle infinite ease-in-out;
+            opacity: 0; /* Start hidden */
         }
 
-        .toast-content {
-            flex: 1;
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0.2; transform: scale(0.8); }
         }
 
-        .toast-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 2px;
+        /* --- NEW: SNAKE BORDER LOADING ANIMATION --- */
+        #success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 99999;
+            /* Hidden by default */
+            display: none; 
         }
 
-        .toast-message {
-            font-size: 12px;
-            color: #cbd5e1;
+        /* Active state makes it visible */
+        #success-overlay.active-overlay {
+            display: block;
+        }
+
+        /* The 4 Lines */
+        #success-overlay span {
+            position: absolute;
+            display: block;
+        }
+
+        /* Using filter: drop-shadow allows the glow to follow the transparency 
+           of the gradient, creating a "fading light" effect instead of a solid box.
+        */
+
+        /* TOP LINE */
+        #success-overlay span:nth-child(1) {
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 6px; /* Slightly thicker for better glow */
+            background: linear-gradient(90deg, transparent, transparent 40%, #7c3aed);
+            filter: drop-shadow(0 0 10px #7c3aed) drop-shadow(0 0 20px #7c3aed);
+            animation: animateTop 2s linear infinite;
+        }
+
+        /* RIGHT LINE */
+        #success-overlay span:nth-child(2) {
+            top: -100%;
+            right: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, transparent 40%, #7c3aed);
+            filter: drop-shadow(0 0 10px #7c3aed) drop-shadow(0 0 20px #7c3aed);
+            animation: animateRight 2s linear infinite;
+            animation-delay: 0.5s;
+        }
+
+        /* BOTTOM LINE */
+        #success-overlay span:nth-child(3) {
+            bottom: 0;
+            right: -100%;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(270deg, transparent, transparent 40%, #7c3aed);
+            filter: drop-shadow(0 0 10px #7c3aed) drop-shadow(0 0 20px #7c3aed);
+            animation: animateBottom 2s linear infinite;
+            animation-delay: 1s;
+        }
+
+        /* LEFT LINE */
+        #success-overlay span:nth-child(4) {
+            bottom: -100%;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(360deg, transparent, transparent 40%, #7c3aed);
+            filter: drop-shadow(0 0 10px #7c3aed) drop-shadow(0 0 20px #7c3aed);
+            animation: animateLeft 2s linear infinite;
+            animation-delay: 1.5s;
+        }
+
+        /* Keyframes for smooth movement around edges */
+        @keyframes animateTop {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+        @keyframes animateRight {
+            0% { top: -100%; }
+            50%, 100% { top: 100%; }
+        }
+        @keyframes animateBottom {
+            0% { right: -100%; }
+            50%, 100% { right: 100%; }
+        }
+        @keyframes animateLeft {
+            0% { bottom: -100%; }
+            50%, 100% { bottom: 100%; }
         }
 
 
@@ -110,15 +174,16 @@
             mix-blend-mode: screen; 
         }
 
-        /* --- WELCOME SCREEN STYLES (UPDATED TO MATCH MAIN THEME) --- */
+        /* --- WELCOME SCREEN STYLES --- */
         #welcome-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            /* Matches body background */
-            background-color: #05050A;
+            background-color: #05050A; /* Matched to body background */
+            /* Single gradient circle matching the main site theme */
+            background-image: radial-gradient(circle at 50% -20%, rgba(120, 50, 255, 0.4), rgba(76, 29, 149, 0.2), transparent 70%);
             z-index: 9999; 
             display: flex;
             flex-direction: column;
@@ -127,20 +192,6 @@
             color: white;
             text-align: center;
             transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1); 
-        }
-
-        /* Aurora Glow for Welcome Screen (Top Spotlight) */
-        #welcome-screen::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 800px;
-            /* Same top glow as main site */
-            background: radial-gradient(circle at 50% -20%, rgba(120, 50, 255, 0.4), rgba(76, 29, 149, 0.2), transparent 70%);
-            z-index: -1;
-            pointer-events: none;
         }
 
         .jiit-logo {
@@ -395,6 +446,7 @@
             opacity: 0.5;
             margin-top: 40px;
             flex-wrap: wrap;
+            min-height: 27px; /* Maintains spacing even without text */
         }
         
         .sponsor-logo {
@@ -558,7 +610,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
             color: white;
         }
 
@@ -612,7 +663,6 @@
             border-radius: 8px;
             transition: all 0.3s;
             margin-top: 10px;
-            overflow: hidden; 
         }
 
         button.submit-btn:hover {
@@ -633,16 +683,18 @@
 </head>
 <body>
 
-    <!-- === APPLE STYLE NOTIFICATION TOAST === -->
-    <div id="notification-toast">
-        <div class="toast-icon">✓</div>
-        <div class="toast-content">
-            <div class="toast-title">Registration Successful</div>
-            <div class="toast-message">You have been registered.</div>
-        </div>
+    <!-- === NEW: STARS CONTAINER === -->
+    <div id="stars-container"></div>
+
+    <!-- === NEW: SNAKE BORDER ANIMATION === -->
+    <div id="success-overlay">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
     </div>
 
-    <!-- === CURSOR GLOW ELEMENT === -->
+    <!-- === NEW: CURSOR GLOW ELEMENT === -->
     <div id="cursor-glow"></div>
 
     <!-- === WELCOME / LANDING SCREEN === -->
@@ -678,7 +730,7 @@
         <!-- Hero Section -->
         <section id="home" class="hero">
             <div class="hero-badge">
-                TechFest 2024 is Live <span>→</span>
+                TechFest 2026 is Live <span>→</span>
             </div>
             <h1>The Ultimate Tech<br>Experience at JIIT</h1>
             <p>Join us for a day of innovation, coding, and gaming. Our landing page template works on all devices, so you only have to set it up once.</p>
@@ -688,12 +740,8 @@
                 <a href="#schedule" class="btn-secondary">View Schedule</a>
             </div>
 
+            <!-- Removed Sponsor Names as requested -->
             <div class="sponsors-bar">
-                <span class="sponsor-logo">Google</span>
-                <span class="sponsor-logo">Microsoft</span>
-                <span class="sponsor-logo">Adobe</span>
-                <span class="sponsor-logo">GitHub</span>
-                <span class="sponsor-logo">JIIT-Hub</span>
             </div>
         </section>
 
@@ -807,30 +855,42 @@
             <div class="team-grid">
                 <!-- Member 1 -->
                 <div class="team-member">
-                    <div class="team-avatar">M1</div>
-                    <h3>Member 1</h3>
-                    <p style="color: #94a3b8; font-size: 14px;">Roll No: 101</p>
-                    <p style="color: #a78bfa; font-weight: bold; font-size:12px;">LEADER</p>
+                    <div class="team-avatar">
+                        <!-- Rocket Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+                    </div>
+                    <h3>Kartikay Lal</h3>
+                    <p style="color: #94a3b8; font-size: 14px;">Roll No: 992505170022</p>
+                    <p style="color: #a78bfa; font-weight: bold; font-size:12px;">FULL STACK</p>
                 </div>
                 <!-- Member 2 -->
                 <div class="team-member">
-                    <div class="team-avatar">M2</div>
-                    <h3>Member 2</h3>
-                    <p style="color: #94a3b8; font-size: 14px;">Roll No: 102</p>
+                    <div class="team-avatar">
+                        <!-- Pen Tool/Design Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+                    </div>
+                    <h3>Ujjayant Chaudhary</h3>
+                    <p style="color: #94a3b8; font-size: 14px;">Roll No: 2405170084</p>
                     <p style="color: #a78bfa; font-weight: bold; font-size:12px;">DESIGN</p>
                 </div>
                 <!-- Member 3 -->
                 <div class="team-member">
-                    <div class="team-avatar">M3</div>
-                    <h3>Member 3</h3>
-                    <p style="color: #94a3b8; font-size: 14px;">Roll No: 103</p>
+                    <div class="team-avatar">
+                        <!-- File Text Icon for Content -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                    </div>
+                    <h3>Arjun Metha</h3>
+                    <p style="color: #94a3b8; font-size: 14px;">Roll No: 992505170002</p>
                     <p style="color: #a78bfa; font-weight: bold; font-size:12px;">CONTENT</p>
                 </div>
                 <!-- Member 4 -->
                 <div class="team-member">
-                    <div class="team-avatar">M4</div>
+                    <div class="team-avatar">
+                        <!-- Code Brackets/Brain Icon for Logic -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </div>
                     <h3>Member 4</h3>
-                    <p style="color: #94a3b8; font-size: 14px;">Roll No: 104</p>
+                    <p style="color: #94a3b8; font-size: 14px;">Roll No: TBD</p>
                     <p style="color: #a78bfa; font-weight: bold; font-size:12px;">LOGIC</p>
                 </div>
             </div>
@@ -860,14 +920,14 @@
                         <option value="IT Quiz">IT Quiz</option>
                     </select>
                 </div>
-                <button type="submit" class="submit-btn" id="registerBtn">Register Now</button>
+                <button type="submit" class="submit-btn">Register Now</button>
             </form>
         </section>
 
     </div>
 
     <footer>
-        <p>&copy; 2024 TechNova. Developed by JIIT BCA Sem-1 Group.</p>
+        <p>&copy; 2026 TechNova. Developed by JIIT BCA Sem-1 Group.</p>
     </footer>
 
     <!-- JavaScript Section -->
@@ -883,34 +943,31 @@
         function registerStudent() {
             var name = document.getElementById('name').value;
             var event = document.getElementById('eventSelect').value;
-            const registerBtn = document.getElementById('registerBtn');
 
             if(event === "") {
                 alert("Please select an event to participate in!");
                 return false; 
             }
 
-            // --- SHOW APPLE-STYLE TOAST ---
-            const toast = document.getElementById('notification-toast');
-            // Update message dynamically
-            toast.querySelector('.toast-message').textContent = name + " registered for " + event;
-            
-            // Wait just a moment for the animation to start, then pop the toast
-            setTimeout(() => {
-                toast.classList.add('show-toast');
-            }, 300);
+            // TRIGGER THE SNAKE BORDER ANIMATION
+            const overlay = document.getElementById('success-overlay');
+            overlay.classList.add('active-overlay');
 
-            // --- CLEANUP & RESET ---
+            // Wait a moment for the animation to start before showing the alert
             setTimeout(function() {
-                // Hide the toast
-                toast.classList.remove('show-toast');
-
-                // Clear form fields
+                alert("Success! " + name + " has been registered for " + event + ".");
+                
+                // Clear fields
                 document.getElementById('name').value = "";
                 document.getElementById('roll').value = "";
                 document.getElementById('eventSelect').value = "";
                 
-            }, 3000); // Keep toast visible for 2.5s
+                // Remove the animation after a few seconds (e.g., 4s for two cycles)
+                setTimeout(function() {
+                    overlay.classList.remove('active-overlay');
+                }, 4000);
+                
+            }, 500);
 
             return false;
         }
@@ -942,6 +999,41 @@
                 glow.style.opacity = '1';
             }
         });
+
+        // Function 4: Generate Glowing Stars
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            const starCount = 200; // Increased count to cover full page height
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random positioning
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                // Random size
+                const size = Math.random() * 3 + 1; // 1px to 4px
+                
+                // Random animation delay & duration
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 3 + 2; 
+
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDelay = `${delay}s`;
+                star.style.animationDuration = `${duration}s`;
+                
+                container.appendChild(star);
+            }
+        }
+
+        // Initialize stars on load
+        window.addEventListener('load', createStars);
+
     </script>
 
 </body>
